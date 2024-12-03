@@ -13,7 +13,7 @@ public class Profesional
 
     public String MatriculaNacional {get;set;}
 
-    public String Dni {get;set;}
+    public String? Dni {get;set;}
 
     public String Telefono {get;set;}
 

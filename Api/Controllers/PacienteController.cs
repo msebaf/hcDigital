@@ -44,7 +44,7 @@ public IActionResult getPaciente(int id)
         return Ok(Paciente);
 }
 
-[HttpGet("dni/{dni}")]
+[HttpGet("n/{dni}")]
 public IActionResult getPaciente_Dni(String dni)
 {
     
@@ -52,7 +52,7 @@ public IActionResult getPaciente_Dni(String dni)
 
     if (Paciente == null)
     {
-        return null;
+        return NotFound();
     }
 
    
@@ -63,12 +63,14 @@ public IActionResult getPaciente_Dni(String dni)
 
     
 [HttpPost]
-    public int nuevoPaciente(Paciente paciente)
+    public Paciente nuevoPaciente(Paciente paciente)
     {
-      var nPaciente = getPaciente_Dni(paciente.Dni);
-      if(nPaciente == null)
+        Console.WriteLine("-------------------" + paciente.FechaNacimiento + "-------------------");
+      ;
+      if(paciente.Dni != null)
       {
        int res = 0;
+        
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
             var query = @"INSERT INTO paciente (Nombre, Direccion, Telefono, FechaNacimiento, Apellido, Mail, Dni, LugarNacimiento) 
@@ -88,15 +90,18 @@ public IActionResult getPaciente_Dni(String dni)
 
 
                 connection.Open();
-                res = Convert.ToInt32(command.ExecuteScalar());
+                res =  Convert.ToInt32(command.ExecuteScalar());
                 connection.Close();
                 paciente.Id = res;
+                Console.WriteLine("-------------"+ res);
+                Console.WriteLine("-------------"+ paciente.Nombre);
             }
         }
-        return res;
+        return paciente;
       }else
       {
-         return -1;
+        paciente.Dni = "-1";
+         return paciente;
       }
       
       

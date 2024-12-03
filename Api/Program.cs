@@ -10,7 +10,7 @@ var configuration = builder.Configuration;
 builder.WebHost.UseUrls("http://localhost:5000", "http://*:5000");
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>(
     options => options.UseMySql(
@@ -60,11 +60,11 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 
 // Configuración de desarrollo: Swagger y UI
-if (app.Environment.IsDevelopment())
+/*if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+}*/
 
 // Configuración de CORS (opcional)
 app.UseCors(x => x

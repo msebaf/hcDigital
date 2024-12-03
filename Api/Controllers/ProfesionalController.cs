@@ -37,12 +37,21 @@ String connectionString = "Server=localhost;User=root;Password=;Database=hc_digi
     [HttpPost("{login}")]
     public IActionResult Login(LoginView login)
     {
-        var profesional = _context.Profesional.FirstOrDefault(x => x.Dni == login.Dni && x.Contrasenia == login.Contrasenia);
+        var profesional = _context.Profesional.FirstOrDefault(x => x.Dni == login.Dni);
+        
 
         if (profesional == null)
-        {
-            return NotFound();
-        }
+            {
+                Console.WriteLine("----------------No encontrado---------------");
+                return NotFound(new { message = "Profesional no encontrado" });
+            }
+
+            if (profesional.Contrasenia != login.Contrasenia)
+            {
+                Console.WriteLine("----------------Contraseña incorrecta---------------");
+                return BadRequest(new { message = "Contraseña incorrecta" });
+            }
+
 
         // agregar la comparacion por hasheo
 
@@ -69,20 +78,21 @@ String connectionString = "Server=localhost;User=root;Password=;Database=hc_digi
 
 
 
-    [HttpGet("id/{id}")]
-public IActionResult getProfesional(int id)
+    [HttpGet("n/{Dni}")]
+    
+public IActionResult getProfesional(String Dni)
 {
     
-    var Profesional = _context.Profesional.FirstOrDefault(x => x.Id == id);
+    var profesional = _context.Profesional.FirstOrDefault(x => x.Dni.Equals(Dni));
 
-    if (Profesional == null)
+    if (profesional == null)
     {
         return NotFound();
     }
 
-   
+        Console.WriteLine(profesional.Nombre);
 
-        return Ok(Profesional);
+        return Ok(profesional);
 }
 
 
