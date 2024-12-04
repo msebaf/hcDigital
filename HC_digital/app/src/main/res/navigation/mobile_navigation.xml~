@@ -20,11 +20,11 @@
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="com.msf.HC_digital.ui.slideshow.SlideshowFragment"
-        android:label="Nueva Receta"
+        android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/nav_asentarIntervencion"
         android:name="com.msf.HC_digital.ui.asentarIntervencion.AsentarIntervencionFragment"
-        android:label="Resumen de Intervencion"
+        android:label="fragment_asentar_intervencion"
         tools:layout="@layout/fragment_asentar_intervencion" />
 </navigation>

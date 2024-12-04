@@ -19,6 +19,6 @@
         <item
             android:id="@+id/nav_asentarIntervencion"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Asentar Intervención" />
+            android:title="Asentar " />
     </group>
 </menu>
