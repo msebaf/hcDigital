@@ -32,41 +32,67 @@ String connectionString = "Server=localhost;User=root;Password=;Database=hc_digi
 public IActionResult getPaciente(int id)
 {
     
-    var Paciente = _context.Paciente.FirstOrDefault(x => x.Id == id);
+    var paciente = _context.Paciente.FirstOrDefault(x => x.Id == id);
 
-    if (Paciente == null)
+    if (paciente == null)
     {
         return NotFound();
     }
 
    
 
-        return Ok(Paciente);
+        var pacienteDTO = new PacienteDTO
+    {
+        Id = paciente.Id,
+        Dni = paciente.Dni,
+        Nombre = paciente.Nombre,
+        Apellido = paciente.Apellido,
+        FechaNacimiento = paciente.FechaNacimiento?.ToString("yyyy-MM-dd"), // Conversión de DateTime a string
+        Telefono = paciente.Telefono,
+        Mail = paciente.Mail,
+        Direccion = paciente.Direccion,
+        LugarNacimiento = paciente.LugarNacimiento
+    };
+
+    return Ok(pacienteDTO);
 }
 
 [HttpGet("n/{dni}")]
 public IActionResult getPaciente_Dni(String dni)
 {
     
-    var Paciente = _context.Paciente.FirstOrDefault(x => x.Dni == dni);
+    var paciente = _context.Paciente.FirstOrDefault(x => x.Dni == dni);
 
-    if (Paciente == null)
+    if (paciente == null)
     {
         return NotFound();
     }
 
    
 
-        return Ok(Paciente);
+         var pacienteDTO = new PacienteDTO
+    {
+        Id = paciente.Id,
+        Dni = paciente.Dni,
+        Nombre = paciente.Nombre,
+        Apellido = paciente.Apellido,
+        FechaNacimiento = paciente.FechaNacimiento?.ToString("yyyy-MM-dd"), // Conversión de DateTime a string
+        Telefono = paciente.Telefono,
+        Mail = paciente.Mail,
+        Direccion = paciente.Direccion,
+        LugarNacimiento = paciente.LugarNacimiento
+    };
+
+    return Ok(pacienteDTO);
 }
 
 
     
 [HttpPost]
-    public Paciente nuevoPaciente(Paciente paciente)
+    public PacienteDTO nuevoPaciente(PacienteDTO paciente)
     {
         Console.WriteLine("-------------------" + paciente.FechaNacimiento + "-------------------");
-      ;
+      
       if(paciente.Dni != null)
       {
        int res = 0;

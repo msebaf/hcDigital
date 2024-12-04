@@ -2,11 +2,14 @@ package com.msf.HC_digital;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+
+import com.google.gson.Gson;
 
 import modelo.Paciente;
 import request.ApiClient;
@@ -36,6 +39,19 @@ public class MenuInicialViewModel extends AndroidViewModel {
                 if (response.isSuccessful()) {
                     // Si la respuesta es exitosa, mostrar un mensaje Toast
                     mensajeToast.postValue("Intervención iniciada");
+                    Gson gson = new Gson();
+                    String pacienteJson = gson.toJson(response.body());
+
+                    // Guardar el JSON en SharedPreferences
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("PacienteData", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("paciente", pacienteJson);
+                    editor.apply();
+
+                    // Ir a la actividad de Menu_Intervencion
+                    Intent intent = new Intent(context, Menu_Intervencion.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
                 } else {
                     // Si la respuesta no es exitosa, notificar para mostrar el diálogo
                     mostrarDialogo.postValue(true);

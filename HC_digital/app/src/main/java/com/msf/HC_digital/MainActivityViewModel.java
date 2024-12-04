@@ -58,6 +58,28 @@ public class MainActivityViewModel extends AndroidViewModel {
                                 Gson gson = new Gson();
                                 String profesionalJson = gson.toJson(response.body());
                                 Log.d("Respuesta", profesionalJson);
+                                SharedPreferences sharedPreferences = context.getSharedPreferences("ProfesionalData", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("profesional", profesionalJson);
+                                editor.apply();
+                                Intent intent = new Intent(context, Menu_Intervencion.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                context.startActivity(intent);
+
+                                /*  Despues para recuperar el profesional
+                                    SharedPreferences sharedPreferences = context.getSharedPreferences("ProfesionalData", Context.MODE_PRIVATE);
+                                    String profesionalJson = sharedPreferences.getString("profesional", null);
+
+                                    // Si el JSON no es nulo, convertirlo de nuevo al objeto Profesional
+                                    if (profesionalJson != null) {
+                                        Gson gson = new Gson();
+                                        Profesional profesional = gson.fromJson(profesionalJson, Profesional.class);
+
+                                        // Usar el objeto recuperado
+                                        Log.d("Profesional Recuperado", profesional.getNombre());
+                                        Log.d("Profesional Recuperado", profesional.getDni());
+                                    }
+                                                                     */
 
 
                             } else {

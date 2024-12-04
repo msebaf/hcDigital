@@ -9,7 +9,7 @@ namespace Api.Models
         public string? Nombre { get; set; }
         public string? Apellido { get; set; }
 
-        public String? FechaNacimiento { get; set; }
+        public DateTime? FechaNacimiento { get; set; }
         public string? Telefono { get; set; }
         public string? Mail { get; set; }
         public string? Direccion { get; set; }
