@@ -8,7 +8,7 @@ public class Diagnostico
 
     public long PacienteId { get; set; }
 
-    public long PatologiaId {get; set;}
+    public long? PatologiaId {get; set;}
 
     public DateTime FechaDiagnostico {get;set;}
 

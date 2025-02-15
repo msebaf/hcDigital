@@ -46,6 +46,39 @@ public IActionResult getDiagnostico(int id)
 
 
 
+   [HttpGet("Cronicas/{id}")]
+public IActionResult getCronicas(long id)
+{
     
+    var diagnosticos = _context.Diagnostico.Where(x => x.PacienteId == id && x.Cronico == true).ToList();
+
+    if (diagnosticos == null)
+    {
+        return NotFound();
+    }
+
    
+    var diagnosticosDTO = new List<DiagnosticoDTO>();
+
+    foreach (var diagnostico in diagnosticos)
+    {
+        var profesional = _context.Profesional.FirstOrDefault(x => x.Id == diagnostico.ProfesionalId);
+        var patologia = _context.Patologia.FirstOrDefault(x => x.Id == diagnostico.PatologiaId);
+        String fecha = diagnostico.FechaDiagnostico.ToString("yyyy-MM-dd");
+
+        DiagnosticoDTO diagnosticoDTO = new DiagnosticoDTO
+        {
+            Id = diagnostico.Id,
+            FechaDiagnostico = fecha,
+            Profesional = profesional?.Nombre + " " + profesional?.Apellido,
+            Patologia = patologia?.Nombre,
+            Cronico = diagnostico.Cronico
+        };
+
+      diagnosticosDTO.Add(diagnosticoDTO);
+    }
+
+    return Ok(diagnosticosDTO);
+    
+}
 }

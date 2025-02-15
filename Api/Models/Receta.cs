@@ -12,13 +12,13 @@ public class Receta
 
     public DateOnly FechaVencimiento { get; set; }
 
-    public Intervencion intervencionId { get; set;}
+    public long IntervencionId { get; set;}
 
     public long? MedicacionId { get; set; }
 
     public long? EstudioId { get; set; }
 
-    public long? PrestacioId { get; set; }
+    public long? PrestacionId { get; set; }
 
     public String? Indicaciones { get; set; }
 
