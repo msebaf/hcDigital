@@ -8,7 +8,7 @@ public class DiagnosticoDTO
 
     public string? Patologia {get; set;}
 
-    public string? FechaDiagnostico {get;set;}
+    public String? FechaDiagnostico {get;set;}
 
     //public Intervencion? Intervencion{get;set;}
 
