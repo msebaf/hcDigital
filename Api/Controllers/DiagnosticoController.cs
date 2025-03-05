@@ -50,7 +50,7 @@ public IActionResult getDiagnostico(int id)
 public IActionResult getCronicas(long id)
 {
     
-    var diagnosticos = _context.Diagnostico.Where(x => x.PacienteId == id && x.Cronico == true).ToList();
+    var diagnosticos = _context.Diagnostico.Where(x => x.PacienteId == id && x.Cronico == true).OrderByDescending(x => x.FechaDiagnostico).ToList();
 
     if (diagnosticos == null)
     {
@@ -72,7 +72,45 @@ public IActionResult getCronicas(long id)
             FechaDiagnostico = fecha,
             Profesional = profesional?.Nombre + " " + profesional?.Apellido,
             Patologia = patologia?.Nombre,
-            Cronico = diagnostico.Cronico
+            Cronico = diagnostico.Cronico,
+            
+        };
+
+      diagnosticosDTO.Add(diagnosticoDTO);
+    }
+
+    return Ok(diagnosticosDTO);
+    
+}
+
+  [HttpGet("Todos/{id}")]
+public IActionResult getDiagnosticos(long id)
+{
+    
+    var diagnosticos = _context.Diagnostico.Where(x => x.PacienteId == id).OrderByDescending(x => x.FechaDiagnostico).ToList();
+
+    if (diagnosticos == null)
+    {
+        return NotFound();
+    }
+
+   
+    var diagnosticosDTO = new List<DiagnosticoDTO>();
+
+    foreach (var diagnostico in diagnosticos)
+    {
+        var profesional = _context.Profesional.FirstOrDefault(x => x.Id == diagnostico.ProfesionalId);
+        var patologia = _context.Patologia.FirstOrDefault(x => x.Id == diagnostico.PatologiaId);
+        String fecha = diagnostico.FechaDiagnostico.ToString("yyyy-MM-dd");
+
+        DiagnosticoDTO diagnosticoDTO = new DiagnosticoDTO
+        {
+            Id = diagnostico.Id,
+            FechaDiagnostico = fecha,
+            Profesional = profesional?.Nombre + " " + profesional?.Apellido,
+            Patologia = patologia?.Nombre,
+            Cronico = diagnostico.Cronico,
+            
         };
 
       diagnosticosDTO.Add(diagnosticoDTO);
