@@ -7,4 +7,6 @@ public class Estudio
     public String Nombre { get; set; }
 
 
+
+
 }

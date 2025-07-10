@@ -80,3 +80,6 @@ C:\Users\msebaf\OneDrive\Escritorio\hcDigital\Api\obj\Debug\net8.0\refint\Api.dl
 C:\Users\msebaf\OneDrive\Escritorio\hcDigital\Api\obj\Debug\net8.0\Api.pdb
 C:\Users\msebaf\OneDrive\Escritorio\hcDigital\Api\obj\Debug\net8.0\Api.genruntimeconfig.cache
 C:\Users\msebaf\OneDrive\Escritorio\hcDigital\Api\obj\Debug\net8.0\ref\Api.dll
+C:\Users\msebaf\OneDrive\Escritorio\hcDigital\Api\bin\Debug\net8.0\Api.staticwebassets.endpoints.json
+C:\Users\msebaf\OneDrive\Escritorio\hcDigital\Api\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\msebaf\OneDrive\Escritorio\hcDigital\Api\obj\Debug\net8.0\staticwebassets\msbuild.Api.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
