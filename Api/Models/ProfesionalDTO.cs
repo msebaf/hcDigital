@@ -1,6 +1,6 @@
 namespace Api.Models;
 
-public class Profesional
+public class ProfesionalDTO
 {
     public long Id { get; set; }
 
@@ -21,4 +21,6 @@ public class Profesional
 
     public String Contrasenia { get; set; }
     
+    public String Especialidad { get; set; }
+
 }

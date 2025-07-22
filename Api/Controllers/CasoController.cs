@@ -74,6 +74,14 @@ public IActionResult getCasos(long id)
             recetas.AddRange(recetasForInterv);
         }
         int recetasCount = recetas.Count;
+        var Especialidades = _context.EspecialidadProfesional.Where(x => x.ProfesionalId == profesional.Id).ToList();
+            String EspecialidadesString = "";
+
+            foreach (var Especialidad in Especialidades)
+            {
+                var esp = _context.Especialidad.FirstOrDefault(x => x.Id == Especialidad.EspecialidadId);
+                EspecialidadesString = EspecialidadesString + esp.Nombre + "-";
+            }
         var casoDTO = new CasoDTO
         {
             Id = caso.Id,
@@ -81,12 +89,13 @@ public IActionResult getCasos(long id)
             NombreProfesional = profesional?.Nombre + " " + profesional?.Apellido,
             Intervenciones = intervencionesCount,
             Recetas = recetasCount,
-            Diagnostico =  patologia?.Nombre,
+            Diagnostico = patologia?.Nombre,
             DiagnosticoPresuntivo = caso.DiagnosticoPresuntivo,
             Terminado = caso.Terminado,
             IntervencionId = primeraIntervencion?.Id,
             PacienteId = id,
             Exploracion = caso.Exploracion,
+            Especialidad = EspecialidadesString
             
 
 

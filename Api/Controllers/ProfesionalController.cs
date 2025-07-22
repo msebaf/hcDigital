@@ -84,15 +84,38 @@ public IActionResult getProfesional(String Dni)
 {
     
     var profesional = _context.Profesional.FirstOrDefault(x => x.Dni.Equals(Dni));
+    var Especialidades = _context.EspecialidadProfesional.Where(x => x.ProfesionalId == profesional.Id).ToList();
+        var profesionalDTO = new ProfesionalDTO();
+        profesionalDTO.Id = profesional.Id;
+        profesionalDTO.Dni = profesional.Dni;
+        profesionalDTO.Nombre = profesional.Nombre;
+        profesionalDTO.Apellido = profesional.Apellido;
+        profesionalDTO.Mail = profesional.Mail;
+        profesionalDTO.Contrasenia = profesional.Contrasenia;
+        profesionalDTO.Telefono = profesional.Telefono;
+        profesionalDTO.MatriculaNacional = profesional.MatriculaNacional;
+        profesionalDTO.MatriculaProvincial = profesional.MatriculaProvincial;
+
+
+    String EspecialidadesString = "";
+
+    foreach (var Especialidad in Especialidades)
+    {
+        var esp = _context.Especialidad.FirstOrDefault(x => x.Id == Especialidad.EspecialidadId);
+        EspecialidadesString = EspecialidadesString + esp.Nombre + "-";
+    }
+    Console.WriteLine(EspecialidadesString);
 
     if (profesional == null)
-    {
-        return NotFound();
-    }
+        {
+            return NotFound();
+        }
+
+        profesionalDTO.Especialidad = EspecialidadesString;
 
         Console.WriteLine(profesional.Nombre);
 
-        return Ok(profesional);
+        return Ok(profesionalDTO);
 }
 
 

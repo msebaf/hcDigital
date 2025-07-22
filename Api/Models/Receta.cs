@@ -12,7 +12,7 @@ public class Receta
 
     public DateOnly FechaVencimiento { get; set; }
 
-    public long IntervencionId { get; set;}
+    public long IntervencionId { get; set; }
 
     public long? MedicacionId { get; set; }
 
@@ -25,6 +25,8 @@ public class Receta
     public bool TratamientoCronico { get; set; }
 
     public bool? Consumida { get; set; }
+    
+    public long? DiagnosticoId { get; set; }
     
     
 

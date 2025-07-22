@@ -15,8 +15,8 @@ namespace Api.Controllers;
 public class RecetaController : ControllerBase
 {
 
-private readonly DataContext _context;
-private readonly IConfiguration _config;
+    private readonly DataContext _context;
+    private readonly IConfiguration _config;
     public RecetaController(DataContext contexto, IConfiguration config)
     {
         _context = contexto;
@@ -24,40 +24,48 @@ private readonly IConfiguration _config;
     }
 
 
-String connectionString = "Server=localhost;User=root;Password=;Database=hc_digital;SslMode=none";
+    String connectionString = "Server=localhost;User=root;Password=;Database=hc_digital;SslMode=none";
 
 
 
     [HttpGet("id/{id}")]
-public IActionResult getReceta(int id)
-{
-    
-    var Receta = _context.Receta.FirstOrDefault(x => x.Id == id);
-
-    if (Receta == null)
+    public IActionResult getReceta(int id)
     {
-        return NotFound();
-    }
 
-   
+        var Receta = _context.Receta.FirstOrDefault(x => x.Id == id);
+
+        if (Receta == null)
+        {
+            return NotFound();
+        }
+
+
 
         return Ok(Receta);
-}
-
-
-
-   [HttpGet("Vigentes/{id}")]
-public IActionResult getRecetas(long id)
-{
-    
-    var recetas = _context.Receta.Where(x => x.PacienteId == id && (x.TratamientoCronico == true || x.Consumida == false)).OrderByDescending(x => x.FechaCreacion).ToList();
-
-    if (recetas == null)
-    {
-        return NotFound();
     }
 
-   
+
+
+    [HttpGet("Vigentes/{id}")]
+    public IActionResult getRecetas(long id)
+    {
+
+      var hoy = DateOnly.FromDateTime(DateTime.Today);
+
+var recetas = _context.Receta
+    .Where(x => x.PacienteId == id &&
+                (x.TratamientoCronico == true || x.Consumida == false) &&
+                x.FechaVencimiento >= hoy)
+    .OrderByDescending(x => x.FechaCreacion)
+    .ToList();
+
+
+        if (recetas == null)
+        {
+            return NotFound();
+        }
+
+
         var recetasDTO = new List<RecetaDTO>();
         foreach (var receta in recetas)
         {
@@ -65,10 +73,10 @@ public IActionResult getRecetas(long id)
             var estudio = _context.Estudio.FirstOrDefault(x => x.Id == receta.EstudioId);
             var medicacion = _context.Medicacion.FirstOrDefault(x => x.Id == receta.MedicacionId);
             var diagnosticoN = _context.Intervencion.FirstOrDefault(x => x.Id == receta.IntervencionId);
-            var diagnostico  =diagnosticoN== null? null  : _context.Diagnostico.FirstOrDefault(x => x.Id == diagnosticoN.Id);
-            var patologia = diagnostico == null? null  : _context.Patologia.FirstOrDefault(x => x.Id == diagnostico.PatologiaId);
+            var diagnostico = diagnosticoN == null ? null : _context.Diagnostico.FirstOrDefault(x => x.Id == diagnosticoN.Id);
+            var patologia = diagnostico == null ? null : _context.Patologia.FirstOrDefault(x => x.Id == diagnostico.PatologiaId);
             var Prestacion = _context.Prestacion.FirstOrDefault(x => x.Id == receta.PrestacionId);
-           
+
             var recetaDTO = new RecetaDTO
             {
                 Id = receta.Id,
@@ -90,21 +98,21 @@ public IActionResult getRecetas(long id)
             recetasDTO.Add(recetaDTO);
         }
         return Ok(recetasDTO);
-}
-    
-    
-   [HttpGet("Todas/{id}")]
-public IActionResult getRecetasTodas(long id)
-{
-    
-    var recetas = _context.Receta.Where(x => x.PacienteId == id).OrderByDescending(x => x.FechaCreacion).ToList();
-
-    if (recetas == null)
-    {
-        return NotFound();
     }
 
-   
+
+    [HttpGet("Todas/{id}")]
+    public IActionResult getRecetasTodas(long id)
+    {
+
+        var recetas = _context.Receta.Where(x => x.PacienteId == id).OrderByDescending(x => x.FechaCreacion).ToList();
+
+        if (recetas == null)
+        {
+            return NotFound();
+        }
+
+
         var recetasDTO = new List<RecetaDTO>();
         foreach (var receta in recetas)
         {
@@ -112,10 +120,10 @@ public IActionResult getRecetasTodas(long id)
             var estudio = _context.Estudio.FirstOrDefault(x => x.Id == receta.EstudioId);
             var medicacion = _context.Medicacion.FirstOrDefault(x => x.Id == receta.MedicacionId);
             var diagnosticoN = _context.Intervencion.FirstOrDefault(x => x.Id == receta.IntervencionId);
-            var diagnostico  =diagnosticoN== null? null  : _context.Diagnostico.FirstOrDefault(x => x.Id == diagnosticoN.Id);
-            var patologia = diagnostico == null? null  : _context.Patologia.FirstOrDefault(x => x.Id == diagnostico.PatologiaId);
+            var diagnostico = diagnosticoN == null ? null : _context.Diagnostico.FirstOrDefault(x => x.Id == diagnosticoN.Id);
+            var patologia = diagnostico == null ? null : _context.Patologia.FirstOrDefault(x => x.Id == diagnostico.PatologiaId);
             var Prestacion = _context.Prestacion.FirstOrDefault(x => x.Id == receta.PrestacionId);
-           
+
             var recetaDTO = new RecetaDTO
             {
                 Id = receta.Id,
@@ -137,6 +145,25 @@ public IActionResult getRecetasTodas(long id)
             recetasDTO.Add(recetaDTO);
         }
         return Ok(recetasDTO);
+    }
+
+
+[HttpPut("{id}")]
+public IActionResult AnularReceta(long id)
+{
+    var receta = _context.Receta.FirstOrDefault(r => r.Id == id);
+    if (receta == null)
+    {
+        return NotFound(new { mensaje = "Receta no encontrada" });
+    }
+
+    // Setea la fecha de vencimiento a ayer
+    receta.FechaVencimiento = DateOnly.FromDateTime(DateTime.Today.AddDays(-1));
+
+    _context.SaveChanges();
+
+    return Ok(new { mensaje = "Receta anulada (fecha de vencimiento actualizada a ayer)" });
 }
-   
+
+
 }
