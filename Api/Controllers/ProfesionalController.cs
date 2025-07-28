@@ -98,12 +98,14 @@ public IActionResult getProfesional(String Dni)
 
 
     String EspecialidadesString = "";
-
-    foreach (var Especialidad in Especialidades)
-    {
-        var esp = _context.Especialidad.FirstOrDefault(x => x.Id == Especialidad.EspecialidadId);
-        EspecialidadesString = EspecialidadesString + esp.Nombre + "-";
-    }
+        if (Especialidades != null && Especialidades.Any())
+        {
+            foreach (var Especialidad in Especialidades)
+            {
+                var esp = _context.Especialidad.FirstOrDefault(x => x.Id == Especialidad.EspecialidadId);
+                EspecialidadesString = EspecialidadesString + esp.Nombre + "-";
+            }
+        }
     Console.WriteLine(EspecialidadesString);
 
     if (profesional == null)

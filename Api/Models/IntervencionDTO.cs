@@ -12,8 +12,6 @@ public class IntervencionDTO
 
     public String? FechaPrestacion { get; set; }
 
-    public string? Observaciones { get; set; }
-
     public string? Actuaciones { get; set; }
 
     public long? CasoId { get; set; }

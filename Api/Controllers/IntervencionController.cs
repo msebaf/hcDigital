@@ -74,7 +74,6 @@ public IActionResult getIntervencionesTodas(long id)
                 Profesional = profesional?.Nombre + " " + profesional?.Apellido,
                 Prestacion = prestacion?.Nombre,
                 Diagnostico = patologia != null ? patologia.Nombre : "Sin diagnóstico",
-                Observaciones = Intervencion.Observaciones,
                 Recetas = recetas,
                 CasoId = Intervencion.CasoId,
                 Actuaciones = Intervencion.Actuaciones,
@@ -89,6 +88,27 @@ public IActionResult getIntervencionesTodas(long id)
         return Ok(intervencionesDTO);
     }
 
-    
+    [HttpPost]
+        public IActionResult CrearIntervencion([FromBody] Intervencion intervencion)
+        {
+        try
+        {
+            intervencion.FechaPrestacion = DateTime.Now;
+            if (intervencion.Actuaciones == null || intervencion.Actuaciones == "")
+            {
+                intervencion.Actuaciones = "Consulta";
+            }
+            Console.WriteLine("Recibido CasoId: " + intervencion.CasoId);
+            _context.Intervencion.Add(intervencion);
+            _context.SaveChanges();
+
+            return Ok(intervencion);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
    
 }

@@ -6,7 +6,6 @@ public class Caso
 
     public long ProfesionalId { get; set; }
 
-    public long IntervencionId {get;set;}
 
     public long PacienteId {get;set;}
 

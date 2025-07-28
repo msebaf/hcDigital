@@ -15,8 +15,7 @@ public class CasoDTO
 
     public long? IntervencionId { get; set; }
 
-    public long? Intervenciones { get; set; }
-
+    
     public long? Recetas { get; set; }
 
     public long PacienteId { get; set; }

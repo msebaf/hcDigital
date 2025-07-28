@@ -12,7 +12,6 @@ public class Intervencion
 
     public DateTime FechaPrestacion { get; set; }
 
-    public string? Observaciones { get; set; }
 
     public string? Actuaciones { get; set; }
 

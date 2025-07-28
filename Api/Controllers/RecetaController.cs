@@ -50,14 +50,14 @@ public class RecetaController : ControllerBase
     public IActionResult getRecetas(long id)
     {
 
-      var hoy = DateOnly.FromDateTime(DateTime.Today);
+        var hoy = DateOnly.FromDateTime(DateTime.Today);
 
-var recetas = _context.Receta
-    .Where(x => x.PacienteId == id &&
-                (x.TratamientoCronico == true || x.Consumida == false) &&
-                x.FechaVencimiento >= hoy)
-    .OrderByDescending(x => x.FechaCreacion)
-    .ToList();
+        var recetas = _context.Receta
+            .Where(x => x.PacienteId == id &&
+                        (x.TratamientoCronico == true || x.Consumida == false) &&
+                        x.FechaVencimiento >= hoy)
+            .OrderByDescending(x => x.FechaCreacion)
+            .ToList();
 
 
         if (recetas == null)
@@ -148,22 +148,42 @@ var recetas = _context.Receta
     }
 
 
-[HttpPut("{id}")]
-public IActionResult AnularReceta(long id)
-{
-    var receta = _context.Receta.FirstOrDefault(r => r.Id == id);
-    if (receta == null)
+    [HttpPut("{id}")]
+    public IActionResult AnularReceta(long id)
     {
-        return NotFound(new { mensaje = "Receta no encontrada" });
+        var receta = _context.Receta.FirstOrDefault(r => r.Id == id);
+        if (receta == null)
+        {
+            return NotFound(new { mensaje = "Receta no encontrada" });
+        }
+
+        // Setea la fecha de vencimiento a ayer
+        receta.FechaVencimiento = DateOnly.FromDateTime(DateTime.Today.AddDays(-1));
+
+        _context.SaveChanges();
+
+        return Ok(new { mensaje = "Receta anulada (fecha de vencimiento actualizada a ayer)" });
     }
 
-    // Setea la fecha de vencimiento a ayer
-    receta.FechaVencimiento = DateOnly.FromDateTime(DateTime.Today.AddDays(-1));
+[HttpPost]
+public IActionResult CrearReceta([FromBody] Receta receta)
+{
+    // Asumimos que los datos como ProfesionalId, PacienteId, etc. ya vienen correctamente cargados en el objeto
 
+    receta.FechaCreacion = DateOnly.FromDateTime(DateTime.Today);
+    
+    // Si no se especifica vencimiento, se le da uno por defecto (1 mes)
+    if (receta.FechaVencimiento == default)
+        receta.FechaVencimiento = DateOnly.FromDateTime(DateTime.Today.AddMonths(1));
+
+    receta.Consumida = false;
+
+    _context.Receta.Add(receta);
     _context.SaveChanges();
 
-    return Ok(new { mensaje = "Receta anulada (fecha de vencimiento actualizada a ayer)" });
+    return Ok(new { mensaje = "Receta creada correctamente", id = receta.Id });
 }
+
 
 
 }
