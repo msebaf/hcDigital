@@ -12,7 +12,7 @@ public class Diagnostico
 
     public DateTime FechaDiagnostico {get;set;}
 
-    public long IntervencionId {get;set;}
+    public long? IntervencionId {get;set;}
 
     public bool Cronico {get;set;}
 
